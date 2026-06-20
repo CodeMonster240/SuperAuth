@@ -1,0 +1,7 @@
+{
+  "SUPERAUTH_BASE_URL": "http://localhost:3000",
+  "CLIENT_ID": "sa_FJbtvGSbte8Zy7htw868aoFxfTJ4uFkf",
+  "CLIENT_SECRET": "2b92ed82d8b6116c2a678e85988215e23c7309782bfc8fd0138ca23fa5cc8573eaae60770d3d0ad8",
+  "SANDBOX_PORT": 4000,
+  "SANDBOX_BASE_URL": "http://localhost:3000/sandbox"
+}

@@ -1,0 +1,41 @@
+<nav class="topnav glass-nav" id="topnav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <span class="brand-icon">⚡</span>
+      <span class="brand-text">SuperAuth</span>
+    </a>
+    <div class="nav-links">
+      <a href="/#features">Features</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/docs">Docs</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon" id="themeToggle" title="Toggle theme" aria-label="Toggle dark/light mode">
+        <i class="fas fa-moon" id="themeIcon"></i>
+      </button>
+      <% if (typeof user !== 'undefined' && user) { %>
+        <a href="<%= user.account_type === 'developer' ? '/dev' : '/dashboard' %>" class="btn btn-ghost">Dashboard</a>
+        <form action="/logout" method="POST" style="display:inline">
+          <button class="btn btn-outline" type="submit">Sign Out</button>
+        </form>
+      <% } else { %>
+        <a href="/login" class="btn btn-ghost">Sign In</a>
+        <a href="/signup" class="btn btn-primary">Get Started</a>
+      <% } %>
+    </div>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<script>
+  (function () {
+    const nav = document.getElementById('topnav');
+    if (!nav) return;
+    function onScroll() {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+</script>

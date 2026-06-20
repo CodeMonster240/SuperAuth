@@ -1,0 +1,57 @@
+<section>
+  <div class="dev-page-header">
+    <div>
+      <h2>Integrations</h2>
+      <p>Click an integration to configure it.</p>
+    </div>
+    <button class="btn btn-primary" id="newIntegrationBtn"><i class="fas fa-plus"></i> New</button>
+  </div>
+
+  <form id="newAppForm" class="panel glass mb-16" style="display:none">
+    <h3 style="margin-bottom:14px">New Integration</h3>
+    <div class="form-row two">
+      <label>Name
+        <input name="name" required minlength="2" placeholder="My App" />
+      </label>
+      <label>Website URL
+        <input name="websiteUrl" placeholder="http://localhost:4000" />
+      </label>
+    </div>
+    <div class="form-row">
+      <label>Callback URL
+        <input name="callbackUrl" placeholder="http://localhost:4000/callback/superauth" />
+      </label>
+    </div>
+    <div class="form-row">
+      <label>Description
+        <textarea name="description" rows="2" placeholder="Brief description"></textarea>
+      </label>
+    </div>
+    <div class="inline-actions mt-12">
+      <button class="btn btn-primary" type="submit">Create Integration</button>
+      <button class="btn btn-glass" type="button" id="cancelNewApp">Cancel</button>
+    </div>
+  </form>
+
+  <div id="appsList">
+    <% if (!apps.length) { %>
+      <div class="panel glass" style="text-align:center;padding:40px 20px">
+        <i class="fas fa-plug" style="font-size:2.2rem;color:var(--muted);margin-bottom:14px;display:block"></i>
+        <p style="color:var(--muted);margin-bottom:16px">No integrations yet.</p>
+        <button class="btn btn-primary" id="emptyNewBtn"><i class="fas fa-plus"></i> Create your first integration</button>
+      </div>
+    <% } else { apps.forEach(function(app) { %>
+      <div class="integration-card glass" data-open-app="<%= app.slug %>">
+        <div class="integration-card-icon"><i class="fas fa-puzzle-piece"></i></div>
+        <div class="integration-card-info">
+          <div class="integration-card-name">
+            <%= app.name %>
+            <span class="status-dot <%= app.is_active ? 'status-green' : 'status-muted' %>"></span>
+          </div>
+          <div class="integration-card-desc"><%= app.description || app.slug %></div>
+        </div>
+        <i class="fas fa-chevron-right integration-card-arrow"></i>
+      </div>
+    <% }); } %>
+  </div>
+</section>

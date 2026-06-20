@@ -1,0 +1,58 @@
+<!-- Dashboard Side Nav - not SPA routed, stays persistent -->
+<aside class="sidenav glass" id="sidenav">
+  <div class="sidenav-header">
+    <a href="/" class="nav-brand-sm">
+      <span class="brand-icon">⚡</span>
+      <span>SuperAuth</span>
+    </a>
+    <button class="btn-icon" id="sidenavToggle" aria-label="Toggle sidebar">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+
+  <% if (typeof user !== 'undefined' && user) { %>
+  <div class="sidenav-user">
+    <div class="user-avatar-sm">
+      <% if (user.avatar_url) { %>
+        <img src="<%= user.avatar_url %>" alt="Avatar"/>
+      <% } else { %>
+        <span><%= user.display_name.charAt(0).toUpperCase() %></span>
+      <% } %>
+    </div>
+    <div class="user-info-sm">
+      <span class="user-name"><%= user.display_name %></span>
+      <span class="user-type badge badge-<%= user.account_type === 'developer' ? 'dev' : 'user' %>">
+        <%= user.account_type === 'developer' ? '⚙ Dev' : '◎ User' %>
+      </span>
+    </div>
+  </div>
+
+  <nav class="sidenav-nav">
+    <% if (user.account_type === 'developer') { %>
+      <a href="/dev/overview"  class="sidenav-link" data-page="overview"><i class="fas fa-chart-line"></i> <span>Overview</span></a>
+      <a href="/dev/apps"      class="sidenav-link" data-page="apps"><i class="fas fa-puzzle-piece"></i> <span>Integrations</span></a>
+      <div class="sidenav-section">DeepLink</div>
+      <a href="/dev/deeplink"  class="sidenav-link" data-page="deeplink"><i class="fas fa-link"></i> <span>DeepLink</span></a>
+      <a href="/dev/analytics" class="sidenav-link" data-page="analytics"><i class="fas fa-chart-bar"></i> <span>Analytics</span></a>
+      <div class="sidenav-section">Tools</div>
+      <a href="/dev/sandbox"   class="sidenav-link" data-page="sandbox"><i class="fas fa-flask"></i> <span>Sandbox</span></a>
+      <div class="sidenav-section">Account</div>
+    <% } else { %>
+      <a href="/dashboard/home" class="sidenav-link" data-page="home"><i class="fas fa-home"></i> <span>Home</span></a>
+      <a href="/dashboard/integrations" class="sidenav-link" data-page="integrations"><i class="fas fa-plug"></i> <span>Integrations</span></a>
+      <a href="/dashboard/security" class="sidenav-link" data-page="security"><i class="fas fa-shield-alt"></i> <span>Security</span></a>
+      <div class="sidenav-section">Account</div>
+    <% } %>
+    <a href="<%= user.account_type === 'developer' ? '/dev/settings' : '/dashboard/settings' %>" class="sidenav-link" data-page="settings"><i class="fas fa-cog"></i> <span>Settings</span></a>
+  </nav>
+  <% } %>
+
+  <div class="sidenav-footer">
+    <button class="btn-icon" id="themeToggleSide" title="Toggle theme">
+      <i class="fas fa-moon" id="themeIconSide"></i>
+    </button>
+    <form action="/logout" method="POST">
+      <button class="btn btn-ghost btn-sm" type="submit"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></button>
+    </form>
+  </div>
+</aside>

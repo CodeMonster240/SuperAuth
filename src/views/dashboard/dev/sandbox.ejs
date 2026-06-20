@@ -1,0 +1,102 @@
+<%
+  const cfg        = sandboxConfig;
+  const port       = cfg.SANDBOX_PORT || 4000;
+  const sandboxUrl = origin + '/sandbox';
+  const callbackUrl = sandboxUrl + '/auth/callback';
+  const isConfigured = !!(cfg.CLIENT_ID && cfg.CLIENT_SECRET);
+  const selectedApp  = apps.find(a => a.client_id === cfg.CLIENT_ID) || null;
+%>
+
+<!-- Header row -->
+<div class="sandbox-topbar">
+  <div>
+    <h2 style="margin:0">🤡 DankBoard Sandbox</h2>
+    <p style="margin:4px 0 0;color:var(--muted);font-size:0.9rem">A live OAuth demo app — configure it, start it, then try logging in.</p>
+  </div>
+  <div class="inline-actions wrap">
+    <button class="btn btn-glass btn-sm" id="sbStartBtn"><i class="fas fa-play"></i> Start</button>
+    <button class="btn btn-glass btn-sm" id="sbStopBtn"><i class="fas fa-stop"></i> Stop</button>
+    <button class="btn btn-glass btn-sm" id="sbRestartBtn"><i class="fas fa-redo"></i> Restart</button>
+    <a href="<%= sandboxUrl %>" class="btn btn-primary btn-sm" target="_blank" id="sbOpenBtn">
+      <i class="fas fa-external-link-alt"></i> Open DankBoard
+    </a>
+  </div>
+</div>
+
+<!-- Terminal panel -->
+<section class="panel glass" style="padding:0;overflow:hidden">
+  <div class="sandbox-term-header">
+    <div class="terminal-dots">
+      <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+    </div>
+    <span class="sandbox-term-title">DankBoard / process log</span>
+    <span class="sandbox-status-badge" id="sbStatusBadge">
+      <span class="sb-status-dot"></span>
+      <span class="sb-status-text">loading…</span>
+    </span>
+    <button class="btn-icon sandbox-term-clear" id="sbClearBtn" title="Clear log"><i class="fas fa-trash-alt"></i></button>
+  </div>
+  <div class="sandbox-terminal" id="sbTerminal">
+    <div class="sb-term-placeholder">Start the sandbox to see output…</div>
+  </div>
+</section>
+
+<!-- Config -->
+<section class="panel glass">
+  <h3><i class="fas fa-plug" style="margin-right:8px;color:var(--primary)"></i>Integration Config</h3>
+
+  <% if (isConfigured) { %>
+    <div class="docs-callout" style="margin:0 0 16px">
+      <strong>✅ Configured</strong> &mdash;
+      Using <strong><%= selectedApp ? selectedApp.name : cfg.CLIENT_ID %></strong>.
+      Make sure your integration's Callback URL is set to <code><%= callbackUrl %></code>.
+    </div>
+  <% } else { %>
+    <div class="docs-callout warn" style="margin:0 0 16px">
+      <strong>Step 1:</strong> In <a href="#" data-page="apps">Integration Settings</a>, set the Callback URL to <code><%= callbackUrl %></code>.<br />
+      <strong>Step 2:</strong> Fill in the form below and click Save.
+    </div>
+  <% } %>
+
+  <form id="sandboxConfigForm">
+    <div class="form-row two">
+      <label>Integration
+        <select id="sandboxAppSelect" name="CLIENT_ID">
+          <option value="">— select —</option>
+          <% apps.forEach(function(a) { %>
+            <option value="<%= a.client_id %>"
+              data-secret-id="<%= a.slug %>"
+              <%= cfg.CLIENT_ID === a.client_id ? 'selected' : '' %>
+            ><%= a.name %></option>
+          <% }); %>
+        </select>
+      </label>
+      <label>Client Secret
+        <input type="password" name="CLIENT_SECRET"
+               placeholder="Paste your client_secret here"
+               autocomplete="off" />
+      </label>
+    </div>
+    <div class="inline-actions mt-12">
+      <button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> Save & Restart</button>
+    </div>
+  </form>
+</section>
+
+<!-- Source files -->
+<section class="panel glass">
+  <h3><i class="fas fa-code" style="margin-right:8px;color:var(--primary)"></i>Source Files</h3>
+  <p style="color:var(--muted);margin-top:0">These are the actual files powering DankBoard. Edit them freely — that's the point!</p>
+  <div class="sandbox-file-tabs">
+    <button class="tab-btn active" data-file="server">server.js</button>
+    <button class="tab-btn" data-file="config">config.json</button>
+    <button class="tab-btn" data-file="login">views/login.ejs</button>
+    <button class="tab-btn" data-file="home">views/home.ejs</button>
+  </div>
+  <div id="sandboxFileView" style="margin-top:0;border-radius:0 0 12px 12px">
+    <div class="code-wrap" style="margin:0;border-radius:0 0 12px 12px">
+      <pre class="code-block" style="max-height:480px;overflow:auto;border-radius:0;margin:0"><code id="sandboxFileCode">Loading…</code></pre>
+      <button class="code-copy-btn" id="sbFileCopyBtn" aria-label="Copy file"><i class="fas fa-copy"></i></button>
+    </div>
+  </div>
+</section>

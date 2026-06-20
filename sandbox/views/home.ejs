@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DankBoard &mdash; Meme Feed</title>
+  <link rel="stylesheet" href="<%= b %>/style.css" />
+</head>
+<body class="home-page">
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="brand-emoji">🤡</span>
+      <strong>DankBoard</strong>
+      <span class="badge">Sandbox Mode</span>
+    </div>
+    <div class="topbar-right">
+      <div class="user-chip">
+        <% if (user.avatar_url) { %>
+          <img src="<%= user.avatar_url %>" class="avatar" alt="avatar" />
+        <% } else { %>
+          <span class="avatar-letter"><%= (user.display_name || user.username || '?')[0].toUpperCase() %></span>
+        <% } %>
+        <span><%= user.display_name || user.username %></span>
+      </div>
+      <form action="<%= b %>/logout" method="POST" style="display:inline">
+        <button class="btn-logout" type="submit">Logout</button>
+      </form>
+    </div>
+  </header>
+
+  <main class="feed">
+    <div class="feed-header">
+      <h2>🔥 Hot Memes</h2>
+      <p>You're authenticated as <strong><%= user.email %></strong> via SuperAuth. Vote on the dankest memes below.</p>
+    </div>
+
+    <div class="meme-grid">
+      <% memes.forEach(function(meme) { %>
+        <article class="meme-card" data-id="<%= meme.id %>">
+          <div class="meme-emoji"><%= meme.emoji %></div>
+          <p class="meme-title"><%= meme.title %></p>
+          <span class="meme-tag">#<%= meme.tag %></span>
+          <div class="meme-votes">
+            <button class="vote-btn up" data-id="<%= meme.id %>" data-dir="up">
+              👍 <span class="count up-count"><%= meme.up %></span>
+            </button>
+            <button class="vote-btn down" data-id="<%= meme.id %>" data-dir="down">
+              👎 <span class="count down-count"><%= meme.down %></span>
+            </button>
+          </div>
+        </article>
+      <% }); %>
+    </div>
+
+    <div class="sandbox-note">
+      <strong>🛠 You're in sandbox mode.</strong>
+      Votes reset when the server restarts. Edit
+      <code>sandbox/server.js</code> to add features, change memes, add a database, or extend the OAuth flow.
+      <a href="<%= b.split('/sandbox')[0] || '' %>/docs" target="_blank">SuperAuth Docs →</a>
+    </div>
+  </main>
+
+  <script>
+    const BASE = '<%= b %>';
+    document.querySelector('.meme-grid').addEventListener('click', async (e) => {
+      const btn = e.target.closest('.vote-btn[data-id]');
+      if (!btn) return;
+      const id  = btn.dataset.id;
+      const dir = btn.dataset.dir;
+      const card = btn.closest('.meme-card');
+      const res  = await fetch(`${BASE}/memes/${id}/vote`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ dir }),
+      });
+      const data = await res.json();
+      card.querySelector('.up-count').textContent   = data.votes.up;
+      card.querySelector('.down-count').textContent = data.votes.down;
+    });
+  </script>
+</body>
+</html>

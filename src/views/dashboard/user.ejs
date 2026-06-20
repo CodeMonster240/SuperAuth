@@ -1,0 +1,25 @@
+<div class="dashboard-shell">
+  <%- include('../partials/sidenav', { user }) %>
+  <main class="dashboard-main" id="dashboardMain">
+    <header class="dashboard-topbar glass">
+      <div>
+        <h1>User Dashboard</h1>
+        <p>Welcome back, <%= user.display_name %>. Here's what's connected.</p>
+      </div>
+      <button class="btn btn-ghost" id="openFunFact"><i class="fas fa-lightbulb"></i> Fun Fact</button>
+    </header>
+
+    <section id="routerLoader" class="router-loader hidden">
+      <div class="loader-spinner"></div>
+      <p>Loading page…</p>
+    </section>
+
+    <section id="dashboardRouter" class="dashboard-router" data-base="/dashboard">
+      <!-- Frontend-routed content mounts here -->
+    </section>
+  </main>
+</div>
+
+<script>window.__USER__ = <%- JSON.stringify(user) %>;</script>
+<script src="/js/numberFlow.js"></script>
+<script src="/js/userDashboard.js"></script>

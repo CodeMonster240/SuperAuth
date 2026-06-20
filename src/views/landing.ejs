@@ -1,0 +1,224 @@
+<%- include('partials/topnav') %>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge glass animate-fade-up">
+      <span class="pulse-dot"></span>
+      <span>Now in public beta — free for developers</span>
+    </div>
+    <h1 class="hero-title animate-fade-up delay-1">
+      One login.<br/>
+      <span class="gradient-text">Infinite possibilities.</span>
+    </h1>
+    <p class="hero-subtitle animate-fade-up delay-2">
+      SuperAuth is the universal SSO platform for the modern web. Let your users log in once and access every connected app — seamlessly, securely, and with style.
+    </p>
+    <div class="hero-actions animate-fade-up delay-3">
+      <a href="/signup" class="btn btn-primary btn-xl">
+        Start for free <i class="fas fa-arrow-right"></i>
+      </a>
+      <a href="/signup?type=developer" class="btn btn-glass btn-xl">
+        Dev Console <i class="fas fa-code"></i>
+      </a>
+    </div>
+    <div class="hero-trust animate-fade-up delay-4">
+      <span class="trust-item"><i class="fas fa-shield-alt"></i> COPPA Compliant</span>
+      <span class="trust-item"><i class="fas fa-lock"></i> AES-256 Encrypted</span>
+      <span class="trust-item"><i class="fas fa-bolt"></i> Sub-50ms Auth</span>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid glass">
+      <div class="stat-item">
+        <span class="stat-num" data-target="12400" data-suffix="+">0</span>
+        <span class="stat-label">Active Users</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-target="340" data-suffix="+">0</span>
+        <span class="stat-label">Apps Connected</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-target="99.9" data-suffix="%" data-decimal="1">0</span>
+        <span class="stat-label">Uptime</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-target="48" data-suffix="ms">0</span>
+        <span class="stat-label">Avg Auth Time</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Why SuperAuth</span>
+      <h2 class="section-title">Everything you need.<br/>Nothing you don't.</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card glass animate-on-scroll">
+        <div class="feature-icon gradient-bg">
+          <i class="fas fa-link"></i>
+        </div>
+        <h3>DeepLink™ SSO</h3>
+        <p>Our patent-pending DeepLink system lets external apps authenticate users with a single redirect — no OAuth headaches, no token management nightmares.</p>
+        <div class="feature-fact">
+          <i class="fas fa-lightbulb"></i>
+          Fun fact: The average user has 27 different passwords. SuperAuth makes that 1.
+        </div>
+      </div>
+      <div class="feature-card glass animate-on-scroll delay-1">
+        <div class="feature-icon gradient-bg-2">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3>Military-Grade Security</h3>
+        <p>Bcrypt-12 password hashing, TOTP 2FA with QR codes, session rotation, rate limiting, and helmet.js CSP headers built in by default.</p>
+        <div class="feature-fact">
+          <i class="fas fa-lightbulb"></i>
+          Fun fact: bcrypt takes ~250ms to hash — that's a feature, not a bug. It makes brute-force attacks take centuries.
+        </div>
+      </div>
+      <div class="feature-card glass animate-on-scroll delay-2">
+        <div class="feature-icon gradient-bg-3">
+          <i class="fas fa-plug"></i>
+        </div>
+        <h3>Social Login</h3>
+        <p>Google, GitHub, Facebook, Twitter, Instagram and Microsoft ready to go. Users sign up once and link all their accounts in the settings panel.</p>
+      </div>
+      <div class="feature-card glass animate-on-scroll">
+        <div class="feature-icon gradient-bg-4">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>Developer Analytics</h3>
+        <p>Real-time signup tracking, clickthrough rates, login trends, and daily active user counts — all in a beautiful dashboard with animated charts.</p>
+        <div class="feature-fact">
+          <i class="fas fa-lightbulb"></i>
+          Fun fact: The term "dashboard" comes from the wooden board on horse carriages that deflected mud.
+        </div>
+      </div>
+      <div class="feature-card glass animate-on-scroll delay-1">
+        <div class="feature-icon gradient-bg-5">
+          <i class="fas fa-child"></i>
+        </div>
+        <h3>COPPA Compliant</h3>
+        <p>Built-in age verification prevents under-13 signups. Birth year analytics help you understand your audience without storing exact birthdays.</p>
+      </div>
+      <div class="feature-card glass animate-on-scroll delay-2">
+        <div class="feature-icon gradient-bg-6">
+          <i class="fas fa-qrcode"></i>
+        </div>
+        <h3>Two-Factor Auth</h3>
+        <p>Time-based OTP with QR code scanning for any authenticator app. Backup codes stored. Disable with password confirmation. Zero friction for legit users.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">The DeepLink Flow</span>
+      <h2 class="section-title">From click to authenticated<br/>in under 3 seconds.</h2>
+    </div>
+    <div class="flow-steps">
+      <div class="flow-step glass animate-on-scroll">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h4>User clicks "Login with SuperAuth"</h4>
+          <p>On your app's site, a simple redirect to <code>/deeplink/create?client_id=…</code></p>
+        </div>
+      </div>
+      <div class="flow-arrow"><i class="fas fa-chevron-right"></i></div>
+      <div class="flow-step glass animate-on-scroll delay-1">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h4>Beautifully branded auth page</h4>
+          <p>User authenticates (or signs up) on SuperAuth. 2FA if enabled.</p>
+        </div>
+      </div>
+      <div class="flow-arrow"><i class="fas fa-chevron-right"></i></div>
+      <div class="flow-step glass animate-on-scroll delay-2">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h4>Code returned to your callback</h4>
+          <p>A one-time code is sent to your callback URL. Exchange it for user data.</p>
+        </div>
+      </div>
+      <div class="flow-arrow"><i class="fas fa-chevron-right"></i></div>
+      <div class="flow-step glass animate-on-scroll delay-3">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h4>Token exchange via API</h4>
+          <p>POST <code>/deeplink/token</code> with your secret. Get verified user profile instantly.</p>
+        </div>
+      </div>
+    </div>
+    <div class="code-preview glass animate-on-scroll">
+      <div class="code-header">
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        <span class="code-title">Token Exchange — your backend</span>
+      </div>
+      <pre class="code-block"><code><span class="c-comment">// Exchange the code for a verified user profile</span>
+<span class="c-keyword">const</span> response = <span class="c-keyword">await</span> fetch(<span class="c-string">'https://superauth.io/deeplink/token'</span>, {
+  method: <span class="c-string">'POST'</span>,
+  headers: { <span class="c-string">'Content-Type'</span>: <span class="c-string">'application/json'</span> },
+  body: JSON.stringify({
+    client_id: <span class="c-string">'sa_your_client_id'</span>,
+    client_secret: <span class="c-string">'your_secret'</span>,
+    code: req.query.code  <span class="c-comment">// from callback URL</span>
+  })
+});
+<span class="c-keyword">const</span> user = <span class="c-keyword">await</span> response.json();
+<span class="c-comment">// → { id, username, display_name, email, avatar_url }</span></code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-card glass">
+      <div class="orb orb-cta-1"></div>
+      <div class="orb orb-cta-2"></div>
+      <h2>Ready to add SuperAuth?</h2>
+      <p>Create your developer account in 60 seconds. No credit card. No setup fees. Free forever for hobby projects.</p>
+      <div class="cta-actions">
+        <a href="/signup?type=developer" class="btn btn-primary btn-xl">I'm a Developer</a>
+        <a href="/signup" class="btn btn-glass btn-xl">I'm a User</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="landing-footer">
+  <div class="container">
+    <div class="footer-brand">
+      <span class="brand-icon">⚡</span>
+      <span>SuperAuth</span>
+    </div>
+    <p class="footer-tagline">Authentication, simplified.</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Documentation</a>
+      <a href="#">Status</a>
+    </div>
+    <p class="footer-copy">© 2026 SuperAuth. Built with ❤️ and bcrypt.</p>
+  </div>
+</footer>
+
+<script src="/js/numberFlow.js"></script>
+<script src="/js/landing.js"></script>

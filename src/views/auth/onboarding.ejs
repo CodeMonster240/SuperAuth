@@ -1,0 +1,93 @@
+<div class="auth-page">
+  <div class="auth-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <div class="auth-container glass-xl">
+    <div class="auth-header">
+      <a href="/" class="auth-brand"><span class="brand-pill"> <img src="https://burchweb-files.sirv.com/Images/superauth-logo.png" alt="SuperAuth Logo" style="height:24px;width:auto;vertical-align:middle;" ></span> SuperAuth</a>
+      <h1>Finish your onboarding</h1>
+      <p>Choose your role, confirm your username, and personalize your dashboard.</p>
+    </div>
+
+    <% if (error) { %>
+      <div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> <%= error %></div>
+    <% } %>
+
+    <form action="/onboarding" method="POST" class="auth-form">
+      <section class="signup-step active" data-step="1">
+        <h3>Choose your user type</h3>
+        <p class="step-subtext">You can change this later in account settings.</p>
+        <div class="account-type-grid">
+          <button type="button" class="account-type-card <%= user.account_type === 'user' ? 'active' : '' %>" data-type="user">
+            <i class="fas fa-user"></i>
+            <h4>Regular User</h4>
+            <p>Use apps, manage logins, and keep everything in one place.</p>
+          </button>
+          <button type="button" class="account-type-card <%= user.account_type === 'developer' ? 'active' : '' %>" data-type="developer">
+            <i class="fas fa-code"></i>
+            <h4>Developer</h4>
+            <p>Build integrations, issue DeepLinks, and view analytics.</p>
+          </button>
+        </div>
+
+        <div class="form-row two">
+          <label>
+            Email
+            <input type="email" name="email" value="<%= user.email || '' %>" readonly />
+          </label>
+          <label>
+            Username
+            <input type="text" name="username" value="<%= user.username || '' %>" required minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]{3,24}" />
+            <small>If you leave this unchanged, we’ll keep your Google default username.</small>
+          </label>
+        </div>
+
+        <div class="form-row two">
+          <label>
+            Display Name
+            <input type="text" name="displayName" value="<%= user.display_name || '' %>" required minlength="2" maxlength="60" />
+          </label>
+          <label>
+            Country
+            <input type="text" name="country" value="<%= user.country || '' %>" placeholder="United States" />
+          </label>
+        </div>
+
+        <div class="form-row two">
+          <label>
+            Preferred Language
+            <input type="text" name="language" value="<%= user.language || 'en' %>" placeholder="en" />
+          </label>
+          <label class="checkbox-line" style="align-items:flex-end; margin-top:0;">
+            <input type="checkbox" name="marketingOk" value="1" <%= user.marketing_ok ? 'checked' : '' %> />
+            Send product updates and security announcements
+          </label>
+        </div>
+
+        <input type="hidden" name="accountType" id="accountTypeInput" value="<%= user.account_type === 'developer' ? 'developer' : 'user' %>" />
+      </section>
+
+      <div class="signup-nav" style="justify-content:flex-end; margin-top: 22px;">
+        <button type="submit" class="btn btn-primary">
+          Continue to SuperAuth <i class="fas fa-check"></i>
+        </button>
+      </div>
+    </form>
+
+    <p class="auth-footnote">Need to adjust your account later? Visit <a href="/dashboard/settings">Dashboard settings</a> after you finish.</p>
+  </div>
+</div>
+
+<script>
+  const accountTypeInput = document.getElementById('accountTypeInput');
+  document.querySelectorAll('.account-type-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.account-type-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      accountTypeInput.value = card.dataset.type;
+    });
+  });
+</script>

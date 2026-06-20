@@ -1,0 +1,35 @@
+<section class="panel glass">
+  <h2>Developer Overview</h2>
+  <p>Track performance, integration health, and DeepLink activity from one place.</p>
+  <div class="kpi-row">
+    <div class="kpi">
+      <span class="kpi-value"><%= apps.length %></span>
+      <span class="kpi-label">Integrations</span>
+    </div>
+    <div class="kpi">
+      <span class="kpi-value"><%= apps.reduce(function(n,a){ return n+(a.total_users||0); }, 0) %></span>
+      <span class="kpi-label">Total Users</span>
+    </div>
+    <div class="kpi">
+      <span class="kpi-value"><%= apps.reduce(function(n,a){ return n+(a.total_clicks||0); }, 0) %></span>
+      <span class="kpi-label">Clickthroughs</span>
+    </div>
+  </div>
+</section>
+
+<section class="panel glass">
+  <h3>Recent Integrations</h3>
+  <ul class="plain-list">
+    <% if (!apps.length) { %>
+      <li>No integrations created yet.</li>
+    <% } else { apps.slice(0,4).forEach(function(app) { %>
+      <li class="list-row">
+        <span><strong><%= app.name %></strong></span>
+        <small><%= app.slug %> &middot; <%= app.is_active ? 'active' : 'inactive' %></small>
+      </li>
+    <% }); } %>
+  </ul>
+  <div class="inline-actions mt-12">
+    <button class="btn btn-primary" data-jump="apps">Create / Manage Integrations</button>
+  </div>
+</section>

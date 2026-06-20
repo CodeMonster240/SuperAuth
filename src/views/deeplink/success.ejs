@@ -1,0 +1,11 @@
+<div class="center-page">
+  <div class="glass card-sm">
+    <h1>Success</h1>
+    <p>Your account has been securely connected. You can return to the app now.</p>
+    <% if (returnTo) { %>
+      <a class="btn btn-primary" href="<%= returnTo %>">Return to app</a>
+    <% } else { %>
+      <a class="btn btn-primary" href="/dashboard">Go to Dashboard</a>
+    <% } %>
+  </div>
+</div>

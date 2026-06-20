@@ -1,0 +1,55 @@
+<section class="panel glass">
+  <h2>Developer Account Settings</h2>
+  <p>Manage your profile and workflow preferences.</p>
+</section>
+
+<section class="panel glass">
+  <h3>Profile</h3>
+  <form id="devProfileForm">
+    <div class="form-row two">
+      <label>Display Name
+        <input name="displayName" value="<%= user.display_name || '' %>" />
+      </label>
+      <label>Country
+        <input name="country" value="<%= user.country || '' %>" />
+      </label>
+    </div>
+    <div class="form-row two">
+      <label>Language
+        <input name="language" value="<%= user.language || 'en' %>" />
+      </label>
+      <label>Gender
+        <input name="gender" value="<%= user.gender || '' %>" />
+      </label>
+    </div>
+    <label class="checkbox-line">
+      <input type="checkbox" name="marketingOk" <%= user.marketing_ok ? 'checked' : '' %> />
+      Product updates and security notices
+    </label>
+    <button class="btn btn-primary" type="submit">Save Changes</button>
+  </form>
+</section>
+
+<section class="panel glass">
+  <h3>Quick Actions</h3>
+  <div class="inline-actions wrap">
+    <button class="btn btn-glass" id="themeHintBtn"><i class="fas fa-moon"></i> Toggle Theme</button>
+    <a class="btn btn-glass" href="/dev/apps"><i class="fas fa-puzzle-piece"></i> Integrations</a>
+    <a class="btn btn-glass" href="/dev/deeplink"><i class="fas fa-link"></i> DeepLink</a>
+    <a class="btn btn-glass" href="/docs" target="_blank"><i class="fas fa-book"></i> Docs</a>
+  </div>
+</section>
+
+<section class="panel glass">
+  <h3>Account Type</h3>
+  <div class="account-switch-card" style="display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <span class="badge badge-dev"><i class="fas fa-code"></i> Developer</span>
+        <span style="color:var(--muted);font-size:0.95rem;">You are currently using the developer workspace.</span>
+      </div>
+      <p style="margin:0;color:var(--muted);">Switching to a regular user account will take you back to the user dashboard.</p>
+    </div>
+    <button class="btn btn-glass" id="switchAccountTypeBtn"><i class="fas fa-exchange-alt"></i> Switch to Regular User</button>
+  </div>
+</section>

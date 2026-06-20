@@ -1,0 +1,170 @@
+<div class="auth-page">
+  <div class="auth-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <div class="auth-container glass-xl">
+    <div class="auth-header">
+      <a href="/" class="auth-brand"><span class="brand-pill"> <img src="https://burchweb-files.sirv.com/Images/superauth-logo.png" alt="SuperAuth Logo" style="height:24px;width:auto;vertical-align:middle;" ></span> SuperAuth</a>
+      <h1>Create your account</h1>
+      <p>Quick setup. Strong security. Full control.</p>
+    </div>
+
+    <% if (error) { %>
+      <div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> <%= error %></div>
+    <% } %>
+
+    <div class="signup-progress-wrap">
+      <div class="progress-meta">
+        <span id="progressStepLabel">Step 1 of 4</span>
+        <span id="progressPercent">25%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="signupProgress"></div>
+      </div>
+    </div>
+
+    <form action="/signup" method="POST" id="signupForm" class="auth-form">
+      <input type="hidden" name="accountType" id="accountTypeInput" value="<%= (typeof queryType !== 'undefined' && queryType === 'developer') ? 'developer' : 'user' %>"/>
+
+      <!-- Step 1 -->
+      <section class="signup-step active" data-step="1">
+        <h3>Pick your account type</h3>
+        <p class="step-subtext">You can switch later in settings.</p>
+        <div class="account-type-grid">
+          <button type="button" class="account-type-card active" data-type="user">
+            <i class="fas fa-user"></i>
+            <h4>Regular User</h4>
+            <p>Connect and manage apps you use.</p>
+          </button>
+          <button type="button" class="account-type-card" data-type="developer">
+            <i class="fas fa-code"></i>
+            <h4>Developer</h4>
+            <p>Create integrations and use DeepLink SSO.</p>
+          </button>
+        </div>
+      </section>
+
+      <!-- Step 2 -->
+      <section class="signup-step" data-step="2">
+        <h3>Basic profile</h3>
+        <p class="step-subtext">This helps personalize your dashboard and analytics.</p>
+        <div class="form-row two">
+          <label>
+            Display Name
+            <input type="text" name="displayName" placeholder="Alex Rivera" required minlength="2" maxlength="60"/>
+          </label>
+          <label>
+            Username
+            <input type="text" name="username" placeholder="alex_dev" required minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]{3,24}"/>
+          </label>
+        </div>
+        <div class="form-row">
+          <label>
+            Email
+            <input type="email" name="email" placeholder="you@example.com" required/>
+          </label>
+        </div>
+      </section>
+
+      <!-- Step 3 -->
+      <section class="signup-step" data-step="3">
+        <h3>Security setup</h3>
+        <p class="step-subtext">Use a strong master password for your SuperAuth account.</p>
+        <div class="form-row two">
+          <label>
+            Master Password
+            <div class="input-with-action">
+              <input type="password" name="password" id="password" required minlength="12"/>
+              <button type="button" class="password-toggle" data-toggle-password="password" aria-label="Show password" title="Show password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </label>
+          <label>
+            Confirm Password
+            <div class="input-with-action">
+              <input type="password" name="confirmPassword" id="confirmPassword" required minlength="12"/>
+              <button type="button" class="password-toggle" data-toggle-password="confirmPassword" aria-label="Show password" title="Show password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </label>
+        </div>
+        <div class="password-meter">
+          <div class="password-meter-bar" id="passwordMeterBar"></div>
+        </div>
+        <ul class="password-hints" id="passwordHints">
+          <li data-rule="len">At least 12 characters</li>
+          <li data-rule="upper">One uppercase letter</li>
+          <li data-rule="num">One number</li>
+          <li data-rule="special">One special character</li>
+        </ul>
+      </section>
+
+      <!-- Step 4 -->
+      <section class="signup-step" data-step="4">
+        <h3>Compliance and preferences</h3>
+        <p class="step-subtext">We collect only what we need for security and COPPA compliance.</p>
+        <div class="form-row three">
+          <label>
+            Birth Year
+            <input type="number" name="birthYear" min="1900" max="<%= new Date().getFullYear() %>" required/>
+          </label>
+          <label>
+            Country
+            <input type="text" name="country" placeholder="United States" required/>
+          </label>
+          <label>
+            Preferred Language
+            <input type="text" name="language" placeholder="en" value="en"/>
+          </label>
+        </div>
+        <div class="form-row">
+          <label>
+            Gender (optional)
+            <input type="text" name="gender" placeholder="Prefer not to say"/>
+          </label>
+        </div>
+        <label class="checkbox-line">
+          <input type="checkbox" name="marketingOk" value="1" checked/>
+          Send me product updates and security announcements
+        </label>
+      </section>
+
+      <div class="signup-nav">
+        <button type="button" class="btn btn-ghost" id="prevStepBtn" disabled>
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <button type="button" class="btn btn-primary" id="nextStepBtn">
+          Continue <i class="fas fa-arrow-right"></i>
+        </button>
+        <button type="submit" class="btn btn-primary" id="submitBtn" style="display:none;">
+          Create Account <i class="fas fa-check"></i>
+        </button>
+      </div>
+    </form>
+
+    <div class="auth-divider"><span>or continue with</span></div>
+    <div class="social-auth-grid">
+      <% if (social.google) { %>
+        <a href="/auth/google" class="social-btn"><i class="fab fa-google"></i> Google</a>
+      <% } %>
+      <% if (social.github) { %>
+        <a href="/auth/github" class="social-btn"><i class="fab fa-github"></i> GitHub</a>
+      <% } %>
+      <% if (social.facebook) { %>
+        <a href="/auth/facebook" class="social-btn"><i class="fab fa-facebook"></i> Facebook</a>
+        <a href="/auth/facebook" class="social-btn"><i class="fab fa-instagram"></i> Instagram (Meta)</a>
+      <% } %>
+    </div>
+
+    <p class="auth-footnote">Already have an account? <a href="/login">Sign in</a></p>
+  </div>
+</div>
+
+<script src="/js/numberFlow.js"></script>
+<script src="/js/signup.js"></script>
+<script src="/js/auth-password-toggle.js"></script>

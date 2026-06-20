@@ -1,0 +1,15 @@
+<% if (!activeApp) { %>
+  <section class="panel glass">
+    <h2>Analytics</h2>
+    <p>Select an integration from the <a href="/dev/apps">Integrations page</a> to view its analytics.</p>
+    <a href="/dev/apps" class="btn btn-primary mt-12">Go to Integrations</a>
+  </section>
+<% } else { %>
+  <section class="panel glass">
+    <h2>Analytics: <%= activeApp.name %></h2>
+    <p class="muted"><%= activeApp.slug %></p>
+    <div id="analyticsMount">
+      <p>Loading analytics&hellip;</p>
+    </div>
+  </section>
+<% } %>

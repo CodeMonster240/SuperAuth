@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DankBoard &mdash; Login</title>
+  <link rel="stylesheet" href="<%= b %>/style.css" />
+</head>
+<body class="login-page">
+  <div class="login-card">
+    <div class="login-brand">
+      <span class="brand-emoji">🤡</span>
+      <h1>DankBoard</h1>
+      <p>The world's most unnecessary meme voting app.</p>
+    </div>
+
+    <% if (!configured) { %>
+      <div class="alert alert-warn">
+        <strong>⚠️ Not configured</strong><br />
+        Open the <a href="<%= saUrl %>/dev/sandbox" target="_blank">SuperAuth Sandbox tab</a>
+        and set your integration credentials, then restart the sandbox server.
+      </div>
+    <% } %>
+
+    <% if (error) { %>
+      <div class="alert alert-err">
+        <strong>Auth error:</strong> <%= error %>
+      </div>
+    <% } %>
+
+    <a href="<%= b %>/auth/login" class="btn-login <%= !configured ? 'disabled' : '' %>">
+      <img src="https://burchweb-files.sirv.com/Images/superauth-logo.png" alt="SuperAuth Logo" /> Login with SuperAuth
+    </a>
+
+    <p class="login-hint">
+      This is a sandbox app for practicing SuperAuth integration.<br />
+      <a href="<%= saUrl %>/docs/callback-system" target="_blank">Read the callback docs</a>
+    </p>
+  </div>
+</body>
+</html>

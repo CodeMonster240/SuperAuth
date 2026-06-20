@@ -1,0 +1,55 @@
+<%- include('../partials/topnav') %>
+
+<div class="docs-page container">
+  <aside class="docs-sidebar glass" id="docsSidebar">
+    <div class="docs-sidebar-head">
+      <h3>SuperAuth Docs</h3>
+      <button class="btn-icon" id="docsSidebarToggle" aria-label="Toggle docs menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+
+    <nav class="docs-nav" id="docsNav">
+      <a href="/docs/getting-started" data-docs-page="getting-started"><i class="fas fa-rocket"></i> <span>Getting Started</span></a>
+      <a href="/docs/callback-system" data-docs-page="callback-system"><i class="fas fa-link"></i> <span>Callback System</span></a>
+      <a href="/docs/auth-flow" data-docs-page="auth-flow"><i class="fas fa-shield-alt"></i> <span>Auth Flow</span></a>
+      <a href="/docs/button-widget" data-docs-page="button-widget"><i class="fas fa-mouse-pointer"></i> <span>Button Widget</span></a>
+      <a href="/docs/playground" data-docs-page="playground"><i class="fas fa-flask"></i> <span>Playground</span></a>
+    </nav>
+
+    <div class="docs-tip">
+      <h4>Quick Tip</h4>
+      <p>Use the Playground to generate callback URLs and token exchange snippets instantly.</p>
+    </div>
+  </aside>
+
+  <main class="docs-main">
+    <header class="docs-header glass">
+      <div>
+        <h1>Documentation</h1>
+        <p>Learn setup, callbacks, and auth integration with runnable examples.</p>
+      </div>
+      <div class="docs-header-actions">
+        <label class="docs-search-wrap">
+          <i class="fas fa-search"></i>
+          <input id="docsSearchInput" placeholder="Search docs, routes, snippets..." />
+        </label>
+        <div class="inline-actions wrap">
+          <a href="/signup?type=developer" class="btn btn-primary">Create Dev Account</a>
+          <a href="/dev/apps" class="btn btn-glass">Go To Dev Console</a>
+        </div>
+      </div>
+    </header>
+
+    <section id="docsSearchResults" class="docs-search-results hidden"></section>
+
+    <section id="docsLoader" class="router-loader hidden">
+      <div class="loader-spinner"></div>
+      <p>Loading docs page…</p>
+    </section>
+
+    <section id="docsRouter" class="docs-router"></section>
+  </main>
+</div>
+
+<script src="/js/docsApp.js"></script>

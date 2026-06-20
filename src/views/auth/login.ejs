@@ -1,0 +1,65 @@
+<div class="auth-page">
+  <div class="auth-bg">
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <div class="auth-container glass-xl auth-login">
+    <div class="auth-header">
+      <a href="/" class="auth-brand"><span class="brand-pill"> <img src="https://burchweb-files.sirv.com/Images/superauth-logo.png" alt="SuperAuth Logo" style="height:24px;width:auto;vertical-align:middle;" ></span> SuperAuth</a>
+      <h1>Welcome back</h1>
+      <p>Sign in to continue your secure journey.</p>
+    </div>
+
+    <% if (error) { %>
+      <div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> <%= error %></div>
+    <% } %>
+
+    <form action="/login" method="POST" class="auth-form">
+      <div class="form-row">
+        <label>
+          Email or Username
+          <input type="text" name="emailOrUsername" required placeholder="you@example.com or username"/>
+        </label>
+      </div>
+      <div class="form-row">
+        <label>
+          Password
+          <div class="input-with-action">
+            <input type="password" name="password" id="loginPassword" required/>
+            <button type="button" class="password-toggle" data-toggle-password="loginPassword" aria-label="Show password" title="Show password">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </label>
+      </div>
+      <% if (typeof needsTotp !== 'undefined' && needsTotp) { %>
+        <div class="form-row">
+          <label>
+            2FA Code
+            <input type="text" name="totpCode" placeholder="123456" inputmode="numeric" pattern="[0-9]{6}" required/>
+          </label>
+        </div>
+      <% } %>
+      <button type="submit" class="btn btn-primary btn-block">Sign In <i class="fas fa-arrow-right"></i></button>
+    </form>
+
+    <div class="auth-divider"><span>or continue with</span></div>
+    <div class="social-auth-grid">
+      <% if (social.google) { %>
+        <a href="/auth/google" class="social-btn"><i class="fab fa-google"></i> Google</a>
+      <% } %>
+      <% if (social.github) { %>
+        <a href="/auth/github" class="social-btn"><i class="fab fa-github"></i> GitHub</a>
+      <% } %>
+      <% if (social.facebook) { %>
+        <a href="/auth/facebook" class="social-btn"><i class="fab fa-facebook"></i> Facebook</a>
+      <% } %>
+    </div>
+
+    <p class="auth-footnote">New here? <a href="/signup">Create account</a></p>
+  </div>
+</div>
+
+<script src="/js/auth-password-toggle.js"></script>

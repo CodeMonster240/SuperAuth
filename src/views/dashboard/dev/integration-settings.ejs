@@ -1,0 +1,90 @@
+<% if (!activeApp) { %>
+  <section class="panel glass" style="text-align:center;padding:40px 20px">
+    <i class="fas fa-plug" style="font-size:2.2rem;color:var(--muted);margin-bottom:14px;display:block"></i>
+    <h3>Integration not found</h3>
+    <button class="btn btn-primary" data-page="apps">Go to Integrations</button>
+  </section>
+<% } else {
+  var app = activeApp;
+%>
+
+<div class="settings-page-header">
+  <button class="btn btn-ghost btn-sm" id="backToDeeplink">
+    <i class="fas fa-arrow-left"></i> Back to <%= app.name %>
+  </button>
+  <div style="display:flex;align-items:center;gap:10px">
+    <h2 style="margin:0"><%= app.name %></h2>
+    <span class="status-dot <%= app.is_active ? 'status-green' : 'status-muted' %>"></span>
+    <span class="muted" style="font-size:0.85rem"><%= app.slug %></span>
+  </div>
+</div>
+
+<div class="settings-page-body">
+
+  <!-- Credentials -->
+  <section class="panel glass">
+    <h3><i class="fas fa-key" style="margin-right:8px;color:var(--primary)"></i>Credentials</h3>
+    <label>Client ID <small class="muted">(public &mdash; safe in links)</small>
+      <div class="input-copy-row" style="margin-top:5px">
+        <input value="<%= app.client_id %>" readonly onclick="this.select()" />
+        <button class="btn btn-outline btn-sm" data-copy-client="<%= app.client_id %>">Copy</button>
+      </div>
+    </label>
+    <div class="inline-actions mt-12">
+      <button class="btn btn-ghost btn-sm" data-regen-secret="<%= app.slug %>">
+        <i class="fas fa-sync-alt"></i> Rotate Secret
+      </button>
+    </div>
+  </section>
+
+  <!-- Edit Details -->
+  <section class="panel glass">
+    <h3><i class="fas fa-sliders-h" style="margin-right:8px;color:var(--primary)"></i>Edit Details</h3>
+    <form id="editIntegrationForm" data-slug="<%= app.slug %>">
+      <div class="form-row two">
+        <label>Name <span class="req">*</span>
+          <input type="text" name="name" value="<%= app.name %>" required />
+        </label>
+        <label>Website URL
+          <input type="url" name="website_url" value="<%= app.website_url || '' %>" placeholder="https://yourapp.com" />
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Callback URL
+          <input type="url" name="callback_url" value="<%= app.callback_url || '' %>" placeholder="https://yourapp.com/auth/callback" />
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Description
+          <textarea name="description" rows="3" placeholder="Short description of your integration"><%= app.description || '' %></textarea>
+        </label>
+      </div>
+      <div class="form-row" style="flex-direction:row;align-items:center;gap:10px">
+        <label class="toggle-label" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="checkbox" name="is_active" id="isActiveToggle" <%= app.is_active ? 'checked' : '' %> />
+          <span>Active</span>
+        </label>
+        <small class="muted">Inactive integrations reject all login attempts.</small>
+      </div>
+      <div class="inline-actions mt-12">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Danger Zone -->
+  <section class="panel glass">
+    <h3 style="color:var(--danger)"><i class="fas fa-exclamation-triangle" style="margin-right:8px"></i>Danger Zone</h3>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div>
+        <strong>Delete Integration</strong>
+        <p class="muted" style="font-size:0.85rem;margin:4px 0 0">Permanently removes this integration, its credentials, and all analytics.</p>
+      </div>
+      <button class="btn btn-danger" id="deleteIntegrationBtn" data-slug="<%= app.slug %>" data-name="<%= app.name %>">
+        <i class="fas fa-trash-alt"></i> Delete Integration
+      </button>
+    </div>
+  </section>
+
+</div>
+<% } %>

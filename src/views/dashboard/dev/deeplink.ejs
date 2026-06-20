@@ -1,0 +1,223 @@
+<% if (!apps.length) { %>
+  <section class="panel glass" style="text-align:center;padding:40px 20px">
+    <i class="fas fa-plug" style="font-size:2.2rem;color:var(--muted);margin-bottom:14px;display:block"></i>
+    <h3>No integrations yet</h3>
+    <p style="color:var(--muted);margin-bottom:16px">Create an integration first to configure it.</p>
+    <button class="btn btn-primary" data-page="apps">Go to Integrations</button>
+  </section>
+<% } else {
+  var app = activeApp || apps[0];
+  var callbackUrl = app.callback_url || '';
+  var deepLinkUrl = origin + '/deeplink/create?client_id=' + app.client_id
+    + '&origin=' + encodeURIComponent(app.website_url || origin)
+    + '&return_to=' + encodeURIComponent(callbackUrl);
+  var tokenSnippet = 'POST https://superauth.io/deeplink/token\nContent-Type: application/json\n\n{\n  "client_id":     "' + app.client_id + '",\n  "client_secret": "YOUR_SERVER_SECRET",\n  "code":          "code_from_callback"\n}';
+  var nodeSnippet = `// Express callback route — server-side only
+app.get('/auth/callback', async (req, res) => {
+  const { code } = req.query;
+  const r = await fetch('https://superauth.io/deeplink/token', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      client_id:     '${app.client_id}',
+      client_secret: process.env.SUPERAUTH_SECRET, // never hardcode!
+      code,
+    }),
+  });
+  const user = await r.json();
+  // user: { id, display_name, email, avatar_url, ... }
+  req.session.user = user;
+  res.redirect('/dashboard');
+});`;
+%>
+
+<!-- Integration header -->
+<div class="integration-detail-header">
+  <button class="btn btn-ghost btn-sm" id="backToApps"><i class="fas fa-arrow-left"></i> Integrations</button>
+  <div class="integration-detail-title">
+    <h2><%= app.name %></h2>
+    <span class="status-dot <%= app.is_active ? 'status-green' : 'status-muted' %>"></span>
+    <span class="muted" style="font-size:0.85rem"><%= app.slug %></span>
+  </div>
+  <div class="int-header-stats">
+    <span class="int-stat"><strong><%= app.total_users  || 0 %></strong><span>users</span></span>
+    <span class="int-stat"><strong><%= app.total_clicks || 0 %></strong><span>clicks</span></span>
+  </div>
+</div>
+
+<!-- Sub-navigation -->
+<nav class="int-tabs">
+  <button class="int-tab" data-tab="url"><i class="fas fa-link"></i> DeepLink URL</button>
+  <button class="int-tab" data-tab="token"><i class="fas fa-exchange-alt"></i> Token Exchange</button>
+  <button class="int-tab" data-tab="settings"><i class="fas fa-cog"></i> Settings</button>
+  <button class="int-tab" data-tab="analytics"><i class="fas fa-chart-bar"></i> Analytics</button>
+</nav>
+
+<!-- ── Tab: URL ──────────────────────────────────────────────────── -->
+<div class="int-pane" id="pane-url" style="display:none">
+  <section class="panel glass">
+    <h3><i class="fas fa-link" style="margin-right:8px;color:var(--primary)"></i>DeepLink URL</h3>
+    <p>Add this link to your app to start a "Login with SuperAuth" flow.</p>
+    <div class="code-wrap">
+      <pre class="code-block" id="deepLinkUrl"><code><%= deepLinkUrl %></code></pre>
+      <button class="code-copy-btn" data-copy-target="deepLinkUrl" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+    </div>
+    <div class="inline-actions mt-12">
+      <button class="btn btn-primary" id="copyDeepLink"><i class="fas fa-copy"></i> Copy URL</button>
+      <button class="btn btn-glass" id="copyEmbed"><i class="fas fa-code"></i> Copy Button Snippet</button>
+      <button class="btn btn-outline btn-sm" id="shortenDeepLink"><i class="fas fa-compress-alt"></i> Get Short URL</button>
+    </div>
+    <div id="shortUrlRow" style="display:none;margin-top:14px">
+      <label style="margin-bottom:6px">Short URL</label>
+      <div class="input-copy-row">
+        <input id="shortUrlInput" readonly onclick="this.select()" style="font-family:monospace;font-size:0.88rem" />
+        <button class="btn btn-outline btn-sm" id="copyShortUrl">Copy</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Button Widget Preview -->
+  <section class="panel glass">
+    <h3><i class="fas fa-mouse-pointer" style="margin-right:8px;color:var(--primary)"></i>Button Widget</h3>
+    <p>Drop two lines of HTML into your site and get a pre-styled, ready-to-use login button:</p>
+    <div class="code-wrap">
+      <pre class="code-block" id="btnWidgetSnippet"><code>&lt;div class="superauth-btn"
+     data-client-id="<%= app.client_id %>"
+     data-return-to="<%= callbackUrl || 'https://yourapp.com/auth/callback' %>"
+     data-theme="auto"&gt;&lt;/div&gt;
+&lt;script src="https://superauth.io/js/btn.js" defer&gt;&lt;/script&gt;</code></pre>
+      <button class="code-copy-btn" data-copy-target="btnWidgetSnippet" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+    </div>
+
+    <div style="margin-top:16px">
+      <p class="muted" style="font-size:0.85rem;margin-bottom:12px">Live preview — click does nothing in the console</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <div class="superauth-btn superauth-btn--preview" data-client-id="<%= app.client_id %>" data-return-to="#" data-theme="light"></div>
+        <div class="superauth-btn superauth-btn--preview" data-client-id="<%= app.client_id %>" data-return-to="#" data-theme="dark"></div>
+        <div class="superauth-btn superauth-btn--preview" data-client-id="<%= app.client_id %>" data-return-to="#" data-theme="dark" data-size="sm" data-shape="pill" data-text="Continue with SuperAuth"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px">
+      <a href="/docs/button-widget" class="btn btn-ghost btn-sm" target="_blank"><i class="fas fa-book"></i> Full widget docs</a>
+    </div>
+  </section>
+
+  <% if (!callbackUrl) { %>
+  <div class="docs-callout warn" style="margin-top:0">
+    <strong>⚠ No Callback URL set.</strong>
+    Go to the <button class="btn-link" data-tab-jump="settings">Settings tab</button> to configure one.
+  </div>
+  <% } %>
+</div>
+
+<!-- ── Tab: Token Exchange ───────────────────────────────────────────────── -->
+<div class="int-pane" id="pane-token" style="display:none">
+  <section class="panel glass">
+    <h3><i class="fas fa-exchange-alt" style="margin-right:8px;color:var(--primary)"></i>Token Exchange</h3>
+    <p>After the redirect, your <strong>server</strong> exchanges the one-time <code>code</code> for a verified user profile:</p>
+    <div class="code-wrap">
+      <pre class="code-block" id="tokenExchangeBlock"><code><%= tokenSnippet %></code></pre>
+      <button class="code-copy-btn" data-copy-target="tokenExchangeBlock" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+    </div>
+    <div class="docs-callout" style="margin-top:14px">
+      <strong>Never</strong> expose <code>client_secret</code> in frontend code — server-side only.
+      <a href="/docs/callback-system">Full token docs &rarr;</a>
+    </div>
+  </section>
+
+  <section class="panel glass">
+    <h3><i class="fas fa-code" style="margin-right:8px;color:var(--primary)"></i>Node.js Quick-Start</h3>
+    <p>Drop this into your Express callback route:</p>
+    <div class="code-wrap">
+      <pre class="code-block" id="nodeSnippetBlock"><code><%= nodeSnippet %></code></pre>
+      <button class="code-copy-btn" data-copy-target="nodeSnippetBlock" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+    </div>
+    <p class="muted" style="font-size:0.85rem;margin-top:8px">
+      Store your client secret as <code>SUPERAUTH_SECRET</code> in your environment variables.
+    </p>
+  </section>
+</div>
+
+<!-- ── Tab: Settings ─────────────────────────────────────────────────────── -->
+<div class="int-pane" id="pane-settings" style="display:none">
+
+  <section class="panel glass">
+    <h3><i class="fas fa-key" style="margin-right:8px;color:var(--primary)"></i>Credentials</h3>
+    <label>Client ID <small class="muted">(public — safe to use in links)</small>
+      <div class="input-copy-row" style="margin-top:5px">
+        <input value="<%= app.client_id %>" readonly onclick="this.select()" />
+        <button class="btn btn-outline btn-sm" data-copy-client="<%= app.client_id %>">Copy</button>
+      </div>
+    </label>
+    <div class="inline-actions mt-12">
+      <button class="btn btn-ghost btn-sm" data-regen-secret="<%= app.slug %>">
+        <i class="fas fa-sync-alt"></i> Rotate Secret
+      </button>
+    </div>
+  </section>
+
+  <section class="panel glass">
+    <h3><i class="fas fa-sliders-h" style="margin-right:8px;color:var(--primary)"></i>Edit Details</h3>
+    <form id="editIntegrationForm" data-slug="<%= app.slug %>">
+      <div class="form-row two">
+        <label>Name <span class="req">*</span>
+          <input type="text" name="name" value="<%= app.name %>" required />
+        </label>
+        <label>Website URL
+          <input type="url" name="website_url" value="<%= app.website_url || '' %>" placeholder="https://yourapp.com" />
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Callback URL
+          <input type="url" name="callback_url" value="<%= app.callback_url || '' %>" placeholder="https://yourapp.com/auth/callback" />
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Logo URL <small class="muted">(shown on the login consent screen)</small>
+          <input type="url" name="logo_url" value="<%= app.logo_url || '' %>" placeholder="https://yourapp.com/logo.png" />
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Description
+          <textarea name="description" rows="3" placeholder="Short description of your integration"><%= app.description || '' %></textarea>
+        </label>
+      </div>
+      <div class="form-row" style="flex-direction:row;align-items:center;gap:10px">
+        <label class="toggle-label" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="checkbox" name="is_active" <%= app.is_active ? 'checked' : '' %> />
+          <span>Active</span>
+        </label>
+        <small class="muted">Inactive integrations reject all login attempts.</small>
+      </div>
+      <div class="inline-actions mt-12">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel glass">
+    <h3 style="color:var(--danger)"><i class="fas fa-exclamation-triangle" style="margin-right:8px"></i>Danger Zone</h3>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div>
+        <strong>Delete Integration</strong>
+        <p class="muted" style="font-size:0.85rem;margin:4px 0 0">Permanently removes this integration, its credentials, and all analytics data.</p>
+      </div>
+      <button class="btn btn-danger" id="deleteIntegrationBtn" data-slug="<%= app.slug %>" data-name="<%= app.name %>">
+        <i class="fas fa-trash-alt"></i> Delete
+      </button>
+    </div>
+  </section>
+
+</div>
+
+<!-- ── Tab: Analytics ────────────────────────────────────────────────────── -->
+<div class="int-pane" id="pane-analytics" style="display:none">
+  <section class="panel glass">
+    <h3><i class="fas fa-chart-bar" style="margin-right:8px;color:var(--primary)"></i>Analytics: <%= app.name %></h3>
+    <div id="dlAnalyticsMount"><p class="muted">Loading…</p></div>
+  </section>
+</div>
+
+<% } %>
+

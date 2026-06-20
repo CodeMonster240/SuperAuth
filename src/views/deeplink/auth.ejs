@@ -1,0 +1,52 @@
+<div class="deeplink-page">
+  <div class="auth-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <div class="deeplink-card glass-xl">
+    <div class="deeplink-head">
+      <span class="brand-pill"> <img src="https://burchweb-files.sirv.com/Images/superauth-logo.png" alt="SuperAuth Logo" style="height:24px;width:auto;vertical-align:middle;"> SuperAuth DeepLink </span>
+      <h1>Continue to <%= app.name %></h1>
+      <p>This app is requesting secure access to your SuperAuth profile.</p>
+    </div>
+
+    <div class="app-preview glass">
+      <div class="app-avatar"><%= app.name.charAt(0).toUpperCase() %></div>
+      <div>
+        <h3><%= app.name %></h3>
+        <p><%= app.description || 'No description provided.' %></p>
+        <% if (app.website_url) { %>
+        <a href="<%= app.website_url %>" target="_blank" rel="noreferrer">Visit website <i class="fas fa-external-link-alt"></i></a>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="permission-box">
+      <h4>This app will receive:</h4>
+      <ul>
+        <li>Public profile (name, username, avatar)</li>
+        <li>Verified email address</li>
+        <li>Account creation timestamp</li>
+      </ul>
+    </div>
+
+    <% if (user) { %>
+    <form method="POST" action="/deeplink/auth/<%= dl.slug %>">
+      <button class="btn btn-primary btn-block" type="submit">
+        Continue as <%= user.display_name %> <i class="fas fa-arrow-right"></i>
+      </button>
+    </form>
+    <a href="/logout" class="btn btn-ghost btn-block mt-12">Switch account</a>
+    <% } else { %>
+    <div class="deeplink-login-actions">
+      <a href="/login?returnTo=/deeplink/auth/<%= dl.slug %>" class="btn btn-primary btn-block">Sign in to SuperAuth</a>
+      <a href="/signup" class="btn btn-glass btn-block">Create new account</a>
+    </div>
+    <p class="helper-line">After signing in, you'll automatically return here.</p>
+    <% } %>
+
+    <p class="tiny-note">For your safety, this link expires in 15 minutes.</p>
+  </div>
+</div>
